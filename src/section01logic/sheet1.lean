@@ -25,14 +25,16 @@ the goal. Your job is to prove the goal from the assumptions.
 ## Tactics you will need
 
 To solve the levels on this sheet you will need to know how to use the
-following tactics:
+following three tactics:
 
 * `intro`
 * `exact`
 * `apply`
 
-You can read the descriptions of these tactics in Part C of the course
-notes.
+You can read the descriptions of these tactics in Part C of the online course
+notes here https://www.ma.imperial.ac.uk/~buzzard/xena/formalising-mathematics-2023/Part_C/tactics/tactics.html
+In this course we'll be learning about 30 tactics in total; the goal of this
+first logic section is to get you up to speed with ten very basic ones.
 
 ## Worked examples
 
