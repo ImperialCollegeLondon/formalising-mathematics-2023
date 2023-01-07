@@ -1,0 +1,8 @@
+[package]
+name = "formalising-mathematics-2023"
+version = "0.1"
+lean_version = "leanprover-community/lean:3.50.3"
+path = "src"
+
+[dependencies]
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "134625f523e737f650a6ea7f0c82a6177e45e622"}
