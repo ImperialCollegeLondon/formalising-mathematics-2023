@@ -56,18 +56,20 @@ begin
   cases h, -- no cases when they're equal!
 end
 
--- The above and the below show that `g` is not injective
 lemma gYb_eq_gYc : g Y.b = g Y.c :=
 begin
-  -- they're both definitionally `Z.d` so which tactic solves this goal?
-  sorry
+  -- they're both definitionally `Z.d`
+  refl,
 end
+
 
 open function
 
 lemma gf_injective : injective (g ∘ f) :=
 begin
-  sorry,
+  -- use `rintro` trick to do `intro, cases` at the same time
+  rintro ⟨_⟩ ⟨_⟩ h,
+  refl,
 end
 
 -- This is a question on the IUM (Imperial introduction to proof course) function problem sheet.
@@ -75,11 +77,24 @@ end
 -- will specialize `h` to the specific case `A = X`.
 example : ¬ (∀ A B C : Type, ∀ (φ : A → B) (ψ : B → C), injective (ψ ∘ φ) → injective ψ) :=
 begin
-  sorry,
+  intro h,
+  specialize h X Y Z f g gf_injective gYb_eq_gYc,
+  cases h,
 end
 
--- This is another one. You might want to make some sublemmas first.
+-- You might want to make some sublemmas first.
+lemma gf_surjective : surjective (g ∘ f) :=
+begin
+  intro z,
+  use X.a,
+  cases z,
+  refl,
+end
+
+-- This is another one. 
 example : ¬ (∀ A B C : Type, ∀ (φ : A → B) (ψ : B → C), surjective (ψ ∘ φ) → surjective φ) :=
 begin
-  sorry,
+  intro h,
+  specialize h X Y Z f g gf_surjective Y.c,
+  rcases h with ⟨⟨_⟩, ⟨⟩⟩, -- this line does three `cases` at once.
 end
