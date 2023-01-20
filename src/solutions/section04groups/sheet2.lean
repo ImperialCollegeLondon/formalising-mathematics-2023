@@ -51,19 +51,33 @@ first.
 
 -/
 
+-- proof using cool `calc` mode
 lemma mul_left_cancel (h : a * b = a * c) : b = c :=
+calc
+  b = 1 * b         : by rw one_mul
+... = (a⁻¹ * a) * b : by rw inv_mul_self
+... = a⁻¹ * (a * b) : by rw mul_assoc
+... = a⁻¹ * (a * c) : by rw h
+... = (a⁻¹ * a) * c : by rw mul_assoc
+... = 1 * c         : by rw inv_mul_self
+... = c             : by rw one_mul
+
+lemma mul_eq_of_eq_inv_mul (h : b = a⁻¹ * c) : a * b = c :=
 begin
-  sorry
+  apply mul_left_cancel a⁻¹,
+  rwa [← mul_assoc, inv_mul_self, one_mul],
 end
 
 lemma mul_one (a : G) : a * 1 = a :=
 begin
-  sorry,
+  apply mul_eq_of_eq_inv_mul,
+  rw inv_mul_self,
 end
 
 lemma mul_inv_self (a : G) : a * a⁻¹ = 1 :=
 begin
-  sorry,
+  apply mul_eq_of_eq_inv_mul,
+  rw mul_one,
 end
 
 end weak_group
@@ -73,7 +87,7 @@ end weak_group
 If you want to take this further: prove that if we make
 a new class `bad_group` by replacing
 `one_mul` by `mul_one` in the definition of `weak_group`
-then it is no longer true that you can prove `one_mul`;
+then it is no longer true that you can prove `mul_inv_self`;
 there are structures which satisfy `mul_assoc`, `mul_one`
 and `inv_mul_self` but which really are not groups.
 Can you find an example? Try it on paper first. 
@@ -87,19 +101,17 @@ class bad_group (G : Type)
 (mul_one : ∀ a : G, a * 1 = a)
 (inv_mul_self : ∀ a : G, a⁻¹ * a = 1)
 
--- `bool` is a type with two terms, `bool.tt` and `bool.ff`. See if you can make it into 
--- a bad group which isn't a group!
-instance : has_one bool := ⟨sorry⟩
-instance : has_mul bool := ⟨sorry⟩
-instance : has_inv bool := ⟨sorry⟩
+instance : has_one bool := ⟨bool.tt⟩
+instance : has_mul bool := ⟨λ x y, x⟩
+instance : has_inv bool := ⟨λ x, 1⟩
 
 instance : bad_group bool :=
-{ mul_assoc := sorry, -- `dec_trivial`, might be able to do this
-  mul_one := sorry, -- dec_trivial,
-  inv_mul_self := sorry, --dec_trivial,
+{ mul_assoc := dec_trivial,
+  mul_one := dec_trivial,
+  inv_mul_self := dec_trivial,
 }
 
 example : ¬ (∀ a : bool, 1 * a = a) :=
 begin
-  sorry, --dec_trivial,
+  dec_trivial,
 end

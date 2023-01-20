@@ -56,23 +56,23 @@ end
 
 example (a b c : G) : (a * b) * c = a * (b * c) :=
 begin
-  sorry
+  exact mul_assoc a b c, -- can be found with `library_search` if you didn't know the answer already
 end
 
 example (a : G) : a * 1 = a :=
 begin
-  sorry
+  exact mul_one a,
 end
 
 -- Can you guess the last two?
 example (a : G) : 1 * a = a :=
 begin
-  sorry
+  exact one_mul a
 end
 
 example (a : G) : a * a⁻¹ = 1 :=
 begin
-  sorry
+  exact mul_inv_self a
 end
 
 -- As well as the axioms, Lean has many other standard facts which are true
@@ -82,44 +82,52 @@ end
 -- let a,b,c be elements of G in the below.
 variables (a b c : G)
 
-
+-- inv_mul_cancel_left
 example : a⁻¹ * (a * b) = b :=
 begin
-  sorry
+  rw [← mul_assoc, inv_mul_self, one_mul],
 end
 
+-- mul_inv_cancel_left
 example : a * (a⁻¹ * b) = b :=
 begin
-  sorry
+  rw [← mul_assoc, mul_inv_self, one_mul]
 end
 
+-- left_inv_eq_right_inv
 example {a b c : G} (h1 : b * a = 1) (h2 : a * c = 1) : b = c :=
 begin
-  -- hint for this one if you're doing it from first principles: `b * (a * c) = (b * a) * c`
-  sorry,
+  have h : b * (a * c) = (b * a) * c,
+  { rw mul_assoc, },
+  rwa [h1, h2, mul_one, one_mul] at h,
 end
 
--- If you do this one from first principles you'll perhaps need the previous result,
--- so find out what it's called using `library_search` whether or not you did it from
--- first principles.
+-- mul_eq_one_iff_inv_eq
 example : a * b = 1 ↔ a⁻¹ = b :=
 begin
-  sorry,
+  split,
+  { intro h,
+    exact left_inv_eq_right_inv (inv_mul_self a) h, },
+  { rintro rfl,
+    exact mul_inv_self a, },
 end
 
+-- inv_one
 example : (1 : G)⁻¹ = 1 :=
 begin
-  sorry,
+  rw [← mul_eq_one_iff_inv_eq, mul_one],
 end
 
+-- inv_inv
 example : (a⁻¹)⁻¹ = a :=
 begin
-  sorry,
+  rw [← mul_eq_one_iff_inv_eq, inv_mul_self],
 end
 
+-- mul_inv_rev
 example : (a * b)⁻¹ = b⁻¹ * a⁻¹ := 
 begin
-  sorry,
+  rw [← mul_eq_one_iff_inv_eq, ← mul_assoc, mul_assoc a, mul_inv_self, mul_one, mul_inv_self],
 end
 
 /-
@@ -128,7 +136,9 @@ Remember the `ring` tactic which didn't look at hypotheses but which could
 prove hypothesis-free identities in commutative rings? There's also a `group`
 tactic which does the same thing for groups. This tactic would have solved
 many of the examples above.  NB the way it works is that it just uses
-Lean's simplifier but armed with all the examples above. If you like you can
+Lean's simplifier but armed with all the examples above; a theorem of Knuth and Bendix
+says that these examples and the axioms of a group give a "confluent rewrite system"
+which can solve any identity in group theory. If you like you can
 try and prove the next example manually by rewriting with the lemmas above
 (if you know their names, which you can find out with `library_search` or by
 educated guessing).
@@ -137,11 +147,17 @@ educated guessing).
 
 example : (b⁻¹ * a⁻¹)⁻¹ * 1⁻¹⁻¹ * b⁻¹ * (a⁻¹ * a⁻¹⁻¹⁻¹) * a = 1 :=
 begin
-  group,
+  rw [inv_one, inv_one, mul_one, mul_inv_rev, inv_inv, inv_inv, mul_assoc, mul_assoc, mul_assoc,
+      mul_inv_cancel_left, mul_assoc, mul_inv_cancel_left, inv_mul_self],
 end
 
 -- Try this trickier problem: if g^2=1 for all g in G, then G is abelian
 example (h : ∀ g : G, g * g = 1) : ∀ g h : G, g * h = h * g :=
 begin
-  sorry
+  have useful : ∀ g : G, g = g⁻¹,
+  { intro g,
+    rw [← eq_comm, ← mul_eq_one_iff_inv_eq],
+    exact h g, },
+  intros g h,
+  rw [useful (g * h), mul_inv_rev, ← useful g, ← useful h],
 end
