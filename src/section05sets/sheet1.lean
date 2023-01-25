@@ -35,7 +35,7 @@ but it will always be a term of type `X`.
 -- set up variables
 variables
   (X : Type) -- Everything will be a subset of `X`
-  (A B C D : set X) -- A,B,C are subsets of `X`
+  (A B C D : set X) -- A,B,C,D are subsets of `X`
   (x y z : X) -- x,y,z are elements of `X` or, more precisely, terms of type `X`
 
 /-
@@ -65,7 +65,7 @@ begin
 end
 
 lemma mem_inter_iff : x ∈ A ∩ B ↔ x ∈ A ∧ x ∈ B :=
-iff.rfl -- you don't even have to go into tactic mode to prove this
+iff.rfl -- you don't even have to go into tactic mode to prove this stuff
 
 /-
 

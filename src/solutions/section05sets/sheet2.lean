@@ -32,7 +32,7 @@ open set
 `x ∈ ∅` is *by definition* equal to `false` and `x ∈ univ` is *by definition*
 equal to `true`. You can use the `change` tactic to make these changes
 if you like. But you don't have to. Remember that `triv` proves `true`
-and `cases h` will solve a goal if `h : false`.
+and `cases h` will solve a goal if `h : false` (because there are no cases!)
 
 -/
 
