@@ -36,10 +36,13 @@ is one way of saying "let `S` be a finite subset of `X`":
 
 -/
 
--- "Let X be a type, let `S` be a subset of `X`, and assume `S` is finite.
--- Then S = S"
-example (X : Type) (S : set X) (hs : S.finite) : S = S := 
-begin refl end
+example (X : Type) (S : set X) (T : set X)
+  (hs : set.finite S) (ht : T.finite) : (S ∪ T).finite :=
+begin
+  -- you cannot hope to prove this from first principles unless you really know
+  -- what you're doing! How are you going to find out the name of this lemma?
+  sorry
+end
 
 /-
 
@@ -72,7 +75,7 @@ begin
 end
 
 -- Lean has the theorem that if you start with a finset, then the coerced set is finite.
-example (S : finset X) : set.finite (S : set X) :=
+example (S : finset X) : set.finite (↑S : set X) :=
 begin
   exact set.to_finite S,
 end
@@ -98,13 +101,19 @@ the sum of i^2 from i=0 to n-1 is (some random cubic with 6 in the denominator).
 
 open_locale big_operators -- enable ∑ notation
 
+example : ∑ i in finset.range 10, i = 45 :=
+begin
+  refl, -- the advantage of constructive finiteness is that Lean knows a complete list of 
+  -- the numbers in `finset.range 10` so `refl` works.
+end
+
 example (n : ℕ) : ∑ i in finset.range n, 
   (i : ℚ)^2 = n * (n - 1) * (2 * n - 1) / 6 :=
 begin
   induction n with d hd,
   { -- base case n = 0 will follow by rewriting lemmas such as `∑ i in finset.range 0 f(i) = 0`
     -- and `0 * x = 0` etc, and the simplifier knows all these things.
-    simp },
+    simp, },
   { -- inductive step
     -- We're summing to `finset.range succ(d)`, and so we next use the lemma saying
     -- that equals the sum over `finset.range d`, plus the last term.

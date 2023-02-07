@@ -38,8 +38,11 @@ is one way of saying "let `S` be a finite subset of `X`":
 
 -- "Let X be a type, let `S` be a subset of `X`, and assume `S` is finite.
 -- Then S = S"
-example (X : Type) (S : set X) (hs : S.finite) : S = S := 
-begin refl end
+example (X : Type) (S : set X) (T : set X)
+  (hs : set.finite S) (ht : T.finite) : (S ∪ T).finite := 
+begin 
+  exact hs.union ht, -- set.finite.union
+end
 
 /-
 
