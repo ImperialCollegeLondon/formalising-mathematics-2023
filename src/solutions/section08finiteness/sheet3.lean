@@ -51,17 +51,44 @@ end prop_version
 
 ## The Type-valued version
 
-This is `[fintype X]`. It's (in my opinion) harder to use, but it seems to be
-the only one for which finite sums work.
+This is `[fintype X]`. It's (in my opinion) harder to use, but finite sums work
+for it, and they don't appear to work for `finite`.
 
 -/
 
+-- Let X be a constructively finite type
 variables (X : Type) [fintype X]
+
+example : X = X :=
+begin
+  -- _inst_1 : fintype X
+  unfreezingI {cases _inst_1 }, -- it's a finset under the hood, plus a proof
+  -- that everything is in it!
+  refl,
+end
+
+-- Lean knows that `fin n` is constructively finite
+example (n : ℕ) : fintype (fin n) := infer_instance 
 
 open_locale big_operators
 
-example : ∑ x : fin 10, x = 45 := rfl 
+-- the advantage of constructive finiteness is that the elements are internally stored
+-- as a list, so you can prove this with `refl`
+example : ∑ x : fin 10, x = 45 :=
+begin
+  refl,
+end
 
-example : ∑ x : fin 10, x.1 = 45 := rfl 
+-- Actually I just tricked you. Can you explain this?
+example : ∑ x : fin 10, x = 25 :=
+begin
+  refl,
+end
 
--- Take a look at the types of the 45 in this proof. Do you know how to?
+-- Here's a better proof
+example : ∑ x : fin 10, x.val = 45 :=
+begin
+  refl
+end
+-- Take a look at the types of the 45 in those proof. Do you know how to? Do you know
+-- what's going on? Hint: ℤ/10ℤ.
