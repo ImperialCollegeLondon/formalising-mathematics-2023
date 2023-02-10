@@ -188,6 +188,6 @@ begin
   haveI : finite (set_of nat.prime),
   { exact set.finite_coe_iff.mpr r, },
   refine is_closed_Union (λ i, arith_progression_closed _ _ _),
-  norm_num, 
-  linarith [nat.prime.two_le hp]
+  norm_cast, 
+  linarith [show (2 : ℕ) ≤ i, by exact_mod_cast nat.prime.two_le i.2],
 end

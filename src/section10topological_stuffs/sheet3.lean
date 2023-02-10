@@ -125,8 +125,8 @@ the point corresponding to the zero ideal.
 -/
 @[simps]
 def η : Spec ℤ[X] :=
-{ as_ideal := _,
-  is_prime := _ }
+{ as_ideal := sorry,
+  is_prime := sorry }
 
 /--
 this is a generic point.
