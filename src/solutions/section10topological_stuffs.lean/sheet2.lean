@@ -3,298 +3,191 @@ Copyright (c) 2023 Jujian Zhang. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Author : Jujian Zhang
 -/
+import tactic
 
-import ring_theory.ideal.operations
-import topology.algebra.polynomial
-import topology.bases
+import topology.subset_properties
+import ring_theory.int.basic
 
 /-!
-# Prime spectrum of a ring and its Zariski topology
+# Proof of infinitude of prime numbers using topology
 
-This files contains the following: 
-- Zariski topology on the set of all prime ideals of any ring `R`.
-- a basis for Zariski topology 
-- if `f : R →+* S` is a ring homomorphism, then `𝔭 ↦ f⁻¹ 𝔭` is continuous. 
-- for integral domains, there is a unique generic point.
+This file contains an interesting proof of infinitude of prime numbers.
+
+Define a topology on `ℤ` by declaring a set `U` is open if and only if 
+for every `x ∈ U`, there exists an `1 ≤ m` such that `mk + x ∈ U` for all `k`. 
+
+Then one can see that every nonempty open set is infinite and every arithmetic
+progression `{mk + a | k ∈ ℤ}` is both open and closed where `1 ≤ m`.
+
+Then suppose there are only finitely many prime numbers, then `⋃_p {pk | k ∈ ℤ}`
+is a finite union of arithmetic progression thus closed, so its complement is open.
+However, the complement of `⋃_p {pk | k ∈ ℤ}` is precisely `{-1, 1}` which cannot
+be open because it is nonempty but finite.
 -/
 
 open topological_space
-open_locale pointwise
 
-universe u
+def contains_arith_progression (U : set ℤ) : Prop :=
+∀ (x : ℤ), x ∈ U → ∃ (m : ℤ), 1 ≤ m ∧ ∀ (k : ℤ), m * k + x ∈ U
 
-variables (R S : Type u) [comm_ring R] [comm_ring S]
+lemma univ_contains_arith_progression : contains_arith_progression set.univ :=
+λ x _, ⟨1, le_refl _, λ _, ⟨⟩⟩
 
-/--
-`Spec R` is the set of prime ideals of `R`
--/
-@[ext]
-structure Spec : Type u := 
-(as_ideal : ideal R)
-(is_prime : as_ideal.is_prime)
-
-attribute [instance] Spec.is_prime -- making sure class inference knows term of `Spec R` is prime
-
-section
-
-variable {R}
-
-/--
-zero locus of a set `s ⊆ R` is the set of all prime ideals larger than `s`.
-
-if `f : R`, then it defines a function `𝔭 ↦ ([f] : R ⧸ 𝔭)`.
-
-So `V s` is exactly those primes
-vanishing for all `f ∈ s`.
--/
-def V (s : set R) : set (Spec R) :=
-{ I : Spec R | s ⊆ I.as_ideal }
-
-lemma mem_V (s : set R) {p : Spec R} : p ∈ V s ↔ s ⊆ p.as_ideal := 
-iff.rfl
-
-/--
-empty set is zero locus of `R`
--/
-lemma V_univ : V (set.univ : set R) = ∅ :=
+lemma inter_contains_arith_progression (s t : set ℤ) 
+  (hs : contains_arith_progression s) (ht : contains_arith_progression t) :
+  contains_arith_progression (s ∩ t) :=
 begin 
-  rw set.eq_empty_iff_forall_not_mem,
-  intros p,
-  rw [mem_V, set.univ_subset_iff],
-  have mem1 : (1 : R) ∉ (p.as_ideal : set R) := p.as_ideal.ne_top_iff_one.mp p.is_prime.ne_top,
-  intros r,
-  rw r at mem1,
-  exact mem1 ⟨⟩,
+  choose fs hfs1 hfs2 using hs,
+  choose ft hft1 hft2 using ht,
+  rintros x ⟨hx1, hx2⟩,
+  refine ⟨fs _ hx1 * ft _ hx2, _, λ k, ⟨_, _⟩⟩,
+  { specialize hfs1 x hx1, 
+    specialize hft1 x hx2,
+    have ineq := mul_le_mul hfs1 hft1 _ _,
+    { rwa one_mul at ineq,  },
+    all_goals { linarith }, },
+  { rw [mul_assoc], apply hfs2, },
+  { rw [mul_comm (fs _ hx1), mul_assoc], apply hft2, },
 end
 
-/--
-R is zero locus of `∅`
--/
-lemma V_empty : V (∅ : set R) = set.univ :=
-set.eq_univ_iff_forall.mpr $ λ p x r, false.elim $ (set.mem_empty_iff_false _).mp r
-
-/--
-union of zero loci is zero locus of pointwise product
--/
-lemma V_union (s t : set R) : V s ∪ V t = V (s * t) :=
+lemma sUnion_contains_arith_progression (s : set (set ℤ)) 
+  (hs : ∀ i ∈ s, contains_arith_progression i) : contains_arith_progression (⋃₀ s) :=
 begin 
-  ext p,
+  rintros x ⟨i, hi1, hi2⟩,
+  obtain ⟨m, hm1, hm2⟩ := hs i hi1 x hi2,
+  refine ⟨m, hm1, λ k, set.mem_sUnion_of_mem (hm2 k) hi1⟩,
+end
+
+instance weird_top_on_int : topological_space ℤ :=
+{ is_open := contains_arith_progression,
+  is_open_univ := univ_contains_arith_progression,
+  is_open_inter := inter_contains_arith_progression,
+  is_open_sUnion := sUnion_contains_arith_progression }
+
+lemma is_open_iff_weird (s : set ℤ) : is_open s ↔ contains_arith_progression s := iff.rfl
+
+lemma nonempty_open_is_infinite (s : set ℤ) (hs1 : is_open s) (hs2 : s.nonempty) :
+  s.infinite :=
+begin 
+  rw is_open_iff_weird at hs1,
+  cases hs2 with x hx,
+  obtain ⟨m, hm1, hm2⟩ := hs1 x hx,
+  set f : ℤ → s := λ z, ⟨_, hm2 z⟩ with f_eq,
+  haveI infinite1 := infinite.of_injective f _,
+  work_on_goal 2 
+  { rintros a b hab,
+    rw [f_eq, subtype.ext_iff_val] at hab,
+    dsimp only at hab,
+    rwa [add_left_inj, mul_right_inj'] at hab,
+    linarith, },
+  rwa set.infinite_coe_iff at infinite1,
+end
+
+def arith_progression (a m : ℤ) := {z : ℤ | ∃ k, m * k + a = z }
+
+lemma arith_progression_open (a m : ℤ) (hm : 1 ≤ m) : is_open (arith_progression a m) :=
+begin 
+  rw is_open_iff_weird,
+  rintros _ ⟨k, rfl⟩,
+  exact ⟨m, hm, λ k', ⟨k + k', by ring⟩⟩,
+end
+
+lemma arith_progression_closed (a m : ℤ) (hm : 1 ≤ m) : is_closed (arith_progression a m) :=
+begin 
+  rw [←is_open_compl_iff, is_open_iff_weird],
+  intros x hx,
+  rw [arith_progression, set.mem_compl_iff, set.mem_set_of_eq, not_exists] at hx,
+  refine ⟨m, hm, λ k r, _⟩,
+  obtain ⟨k', hk'⟩ := r,
+  
+  refine hx (k' - k) _,
+  rw [←sub_eq_zero] at hk' ⊢,
+  rw ←hk', 
+  ring,
+end
+
+lemma arith_progression_clopen (a m : ℤ) (hm : 1 ≤ m) :
+  is_clopen (arith_progression a m) :=
+{ left := arith_progression_open _ _ hm,
+  right := arith_progression_closed _ _ hm }
+
+def prime_int : Type := subtype (prime : ℤ → Prop) 
+
+lemma seteq1 : 
+(⋃ (p : ℕ) (hp : nat.prime p), arith_progression 0 p)ᶜ = 
+{1, -1} :=
+begin 
+  classical,
+  ext1 x,
   split,
-  { rintros (hp|hp);
-    rw mem_V at hp ⊢;
-    intros r hr;
-    obtain ⟨a, b, ha, hb, rfl⟩ := hr,
-    { specialize hp ha,
-      exact p.as_ideal.mul_mem_right _ hp, },
-    { specialize hp hb,
-      exact p.as_ideal.mul_mem_left _ hp, }, },
-  { intros hp,
-    rw mem_V at hp,
-    rw [set.mem_union, mem_V, mem_V],
-    contrapose! hp,
-    simp only [set.not_subset_iff_exists_mem_not_mem] at hp ⊢,
-    obtain ⟨⟨a, ha1, ha2⟩, ⟨b, hb1, hb2⟩⟩ := hp,
-    exact ⟨_, ⟨a, b, ha1, hb1, rfl⟩, λ r, (p.is_prime.mem_or_mem r).elim 
-      (λ h, ha2 h) (λ h, hb2 h)⟩, },
+  { intros hx,
+    simp only [set.mem_compl_iff, set.mem_Union, not_exists, add_zero, 
+      set.mem_set_of_eq] at hx,
+    by_cases ne0 : x = 0,
+    { rw ne0 at *,
+      exfalso,
+      specialize hx 2 nat.prime_two,
+      refine hx ⟨0, by norm_num⟩, },
+    
+    by_contra r,
+    simp only [set.mem_insert_iff, set.mem_singleton_iff, not_or_distrib] at r,
+    have ineq1 : x.nat_abs ≠ 1,
+    { intros rid, rw [int.nat_abs_eq_iff, show (↑(1 : ℕ) : ℤ) = 1, from rfl] at rid, tauto, },
+    
+    specialize hx (x.nat_abs.min_fac) (nat.min_fac_prime ineq1),
+    obtain ⟨r, hr⟩ := x.nat_abs.min_fac_dvd,
+    rcases int.nat_abs_eq x with (hx'|hx'),
+    { refine hx ⟨r, _⟩,
+      rw [add_zero],
+      conv_rhs { rw [hx'] },
+      exact_mod_cast hr.symm, },
+    { refine hx _,
+      refine ⟨-r, _⟩,
+      replace hx' := hx'.symm,
+      rw ←neg_eq_iff_neg_eq at hx',
+      rw [add_zero, mul_neg, neg_eq_iff_neg_eq, hx'],
+      exact_mod_cast hr, }, },
+
+  { intros r,
+    simp only [set.mem_insert_iff, set.mem_singleton_iff] at r,
+    rcases r with (rfl|rfl),
+    all_goals 
+    { simp_rw [set.mem_compl_iff, set.mem_Union, arith_progression, set.mem_set_of_eq, add_zero],
+      push_neg,
+      intros i hi1 k r,
+      try { rw int.mul_eq_one_iff_eq_one_or_neg_one at r },
+      try { rw int.mul_eq_neg_one_iff_eq_one_or_neg_one at r },
+      rcases r with (⟨hi, rfl⟩|⟨hi, rfl⟩),
+      { norm_cast at hi,
+        rw hi at hi1,
+        exact nat.not_prime_one hi1, },
+      { have := int.coe_nat_nonneg i, linarith, }, }, },
 end
 
-/--
-intersection of zero loci is zero locus of union
--/
-lemma V_inter {ι : Sort*} (s : ι → set R) : 
-  (⋂ i : ι, V (s i)) = V (⋃ i, (s i)) :=
+lemma not_closed : ¬ is_closed (⋃ (p : ℕ) (hp : nat.prime p), arith_progression 0 p) :=
 begin 
-  ext p, 
-  split;
-  intros hp,
-  { simp_rw [set.mem_Inter, mem_V] at hp,
-    rw [mem_V, set.Union_subset_iff],
-    assumption, },
-  { rw [mem_V, set.Union_subset_iff] at hp,
-    simp_rw [set.mem_Inter, mem_V],
-    assumption, },
+  rw [←is_open_compl_iff.not, seteq1],
+  intro r,
+  have h1 := nonempty_open_is_infinite {1, -1} r ⟨1, by simp⟩,
+  have h2 : ({1, -1} : set ℤ).finite := by simp,
+  rw ←set.not_infinite at h2,
+  exact h2 h1,
 end
 
-end
-
-instance Zariski_topology : topological_space (Spec R) :=
-topological_space.of_closed 
-{ t | ∃ (s : set R), t = V s } ⟨set.univ, V_univ.symm⟩ 
+lemma not_closed' :  ¬ is_closed (⋃ (p : set_of nat.prime), arith_progression 0 (p : ℤ)) :=
 begin 
-  rintros _ hS,
-  choose a ha using hS,
-  rw [set.sInter_eq_bInter],
-  suffices : (⋂ (i : set (Spec R)) (h : i ∈ A), i) = ⋂ (i : A), V (a i.2),
-  { rw [this, V_inter],
-    exact ⟨_, rfl⟩, },
-  simp only [subtype.val_eq_coe, subtype.coe_mk, set.Inter_coe_set],
-  exact set.Inter_congr (λ s, set.Inter_congr $ λ hs, ha hs),
+  simp only [coe_coe, set.mem_set_of_eq, subtype.coe_mk, set.Union_coe_set],
+  exact not_closed,
 end
+
+lemma infinite_prime : (set_of nat.prime).infinite :=
 begin 
-  rintros _ ⟨s, rfl⟩ _ ⟨t, rfl⟩,
-  rw V_union,
-  exact ⟨s * t, rfl⟩,
-end
-
-/--
-open sets of Zariski topology are complement of zero loci
--/
-lemma zt_is_open (s : set (Spec R)) : is_open s ↔ ∃ (t : set R), s = (V t)ᶜ :=
-begin 
-  change (∃ _, _) ↔ _,
-  rw [exists_congr],
-  exact λ a, by rw [eq_compl_comm, eq_comm],
-end
-
-section
-
-variables {R S}
-
-/--
-Basic open sets
--/
-def D (f : R) : set (Spec R) := (V {f})ᶜ
-
-lemma mem_D (f : R) (p : Spec R) : p ∈ D f ↔ f ∉ p.as_ideal :=
-begin 
-  split;
-  intros hp hf;
-  rw [D, set.mem_compl_iff, mem_V, set.singleton_subset_iff] at hp <|>
-  rw [mem_V, set.singleton_subset_iff] at hf;
-  exact hp hf,
-end
-
-lemma open_D (f : R) : is_open (D f) :=
-begin 
-  rw [D, zt_is_open],
-  exact ⟨_, rfl⟩,
-end
-
-/--
-Basic open sets form a basis
--/
-lemma D_is_basis : is_topological_basis (set.range (D : R → set (Spec R))) :=
-is_topological_basis_of_open_of_nhds (by { rintros _ ⟨r, -, rfl⟩, exact open_D _ }) $ 
-λ p s hp hs, begin
-  simp only [set.mem_range, exists_prop, exists_exists_eq_and, mem_D],
-  rw zt_is_open at hs,
-  obtain ⟨s, rfl⟩ := hs,
-  rw [set.mem_compl_iff, mem_V, set.not_subset_iff_exists_mem_not_mem] at hp,
-  obtain ⟨x, hx1, hx2⟩ := hp,
-  refine ⟨x, hx2, λ y hy H, _⟩,
-  exact (mem_D _ _).mp hy (H hx1),
-end
-
-/--
-Ring homomorphisms induces continuous map (contravariantly).
--/
-def comap (f : R →+* S) : Spec S → Spec R :=
-λ p, ⟨p.as_ideal.comap f, infer_instance⟩
-
-lemma comap_as_ideal (f : R →+* S) (p : Spec S) : (comap f p).as_ideal = p.as_ideal.comap f := rfl
-
-lemma continuous_comap (f : R →+* S) : continuous (comap f) :=
-begin 
-  refine D_is_basis.continuous _ _,
-  rintros _ ⟨r, rfl⟩,
-  rw show comap f ⁻¹' D r  = D (f r),
-  { ext1 p, 
-    simp only [set.mem_preimage, mem_D, comap_as_ideal, ideal.mem_comap], },
-  exact open_D _,
-end
-
-local notation `ℤ[X]` := (polynomial ℤ)
--- every thing from this points work for a generic integral domain
-/--
-the point corresponding to the zero ideal.
--/
-@[simps]
-noncomputable def η : Spec ℤ[X] :=
-{ as_ideal := ⊥,
-  is_prime := 
-  { ne_top' := begin 
-      rw [ideal.ne_top_iff_one, ideal.mem_bot],
-      norm_num,
-    end,
-    mem_or_mem' := λ x y hxy, 
-    begin 
-      simp only [ideal.mem_bot] at hxy ⊢,
-      rwa mul_eq_zero at hxy,
-    end } }
-
-/--
-this is a generic point.
--/
-lemma generic_η : closure {η} = (set.univ : set (Spec ℤ[X])) :=
-begin 
-  rw show closure {η} = V (η.as_ideal : set ℤ[X]),
-  { ext,
-    rw [mem_V, mem_closure_iff, η_as_ideal],
-    split,
-    { intros h r hr,
-      rw [set_like.mem_coe, ideal.mem_bot] at hr,
-      rw hr,
-      exact ideal.zero_mem _, },
-    { rintros - o ho hx,
-      rw zt_is_open at ho,
-      obtain ⟨o, rfl⟩ := ho,
-      rw [set.mem_compl_iff, mem_V, set.not_subset_iff_exists_mem_not_mem] at hx,
-      obtain ⟨q, hq1, hq2⟩ := hx,
-      by_cases q0 : q = 0,
-      { rw [q0] at *,
-        exfalso,
-        refine hq2 (ideal.zero_mem _), },
-      rw show (V o)ᶜ ∩ {η} = {η},
-      { rw [set.inter_eq_right_iff_subset, set.singleton_subset_iff,
-          set.mem_compl_iff, mem_V, set.not_subset_iff_exists_mem_not_mem, η_as_ideal],
-        exact ⟨q, hq1, q0⟩, },
-      exact ⟨η, set.mem_singleton _⟩, }, },
-  rw [η_as_ideal, set.eq_univ_iff_forall],
-  intros x,
-  rw [mem_V],
-  intros y hy,
-  rw [set_like.mem_coe, ideal.mem_bot] at hy,
-  rw hy,
-  exact ideal.zero_mem _,
-end
-
-/--
-Generic points is unique.
--/
-lemma generic_point_uniq (x : Spec ℤ[X]) (hx : closure {x} = (set.univ : set (Spec ℤ[X]))) :
-  x = η :=
-begin 
-  have h : closure {x} = closure {η},
-  { rw [generic_η, hx], },
-  have H : ∀ (a b : Spec ℤ[X]), a.as_ideal ≤ b.as_ideal ↔ b ∈ closure {a},
-  { intros a b,
-    split,
-    { rw mem_closure_iff,
-      intros hle o ho hb,
-      rw zt_is_open at ho,
-      obtain ⟨o, rfl⟩ := ho,
-      rw [set.mem_compl_iff, mem_V, set.not_subset_iff_exists_mem_not_mem] at hb,
-      obtain ⟨q, hq1, hq2⟩ := hb,
-      rw [set.inter_nonempty], 
-      simp_rw [set.mem_compl_iff, mem_V, set.not_subset_iff_exists_mem_not_mem, 
-        set_like.mem_coe],
-      exact ⟨a, ⟨q, hq1, λ h, hq2 (hle h)⟩, set.mem_singleton _⟩, },
-    { intros hmem p hp,
-      rw [mem_closure_iff] at hmem,
-      contrapose! hp,
-      specialize hmem (D p) (open_D p) ((mem_D _ _).mpr hp),
-      obtain ⟨x, hx1, hx2⟩ := hmem,
-      rw set.mem_singleton_iff at hx2,
-      rw hx2 at *,
-      rwa mem_D at hx1, }, },
-  have Hle1 : x.as_ideal ≤ η.as_ideal,
-  { rw [H, h],
-    exact subset_closure (set.mem_singleton _), },
-  have Hle2 : η.as_ideal ≤ x.as_ideal,
-  { rw [H, ←h],
-    exact subset_closure (set.mem_singleton _), },
-  ext1,
-  exact le_antisymm Hle1 Hle2,
-end
-
+  by_contra r,
+  rw set.not_infinite at r,
+  refine not_closed' _,
+  haveI : finite (set_of nat.prime),
+  { exact set.finite_coe_iff.mpr r, },
+  refine is_closed_Union (λ i, arith_progression_closed _ _ _),
+  norm_num, 
+  linarith [nat.prime.two_le hp]
 end
