@@ -62,6 +62,19 @@ But is
 example (x y : X) (h : x ≠ y) : ¬ @@continuous (indiscrete X) (discrete X) id :=
 sorry
 
+
+/--
+Finite sets only have finitely many possible topology on them.
+-/
+instance finitely_many_topologies [fintype X] : fintype (topological_space X) :=
+sorry
+/--
+The upper bound is 2^2^|X|
+-/
+lemma card_topology_le [fintype X] : 
+  fintype.card (topological_space X) ≤ 2 ^ (2 ^ fintype.card X):=
+sorry
+
 /--
 `ℝ` has a basis consisted of all open intervals
 -/

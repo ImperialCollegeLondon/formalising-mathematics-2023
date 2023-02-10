@@ -90,6 +90,29 @@ begin
 end
 
 /--
+Finite sets only have finitely many possible topology on them.
+-/
+instance finitely_many_topologies [fintype X] : fintype (topological_space X) :=
+let i : topological_space X → set (set X) := λ τ, τ.is_open in
+have inj_i : function.injective i, by { intros τ1 τ2 h, ext1, exact h },
+begin 
+  haveI : fintype (set (set X)) := infer_instance,
+  exact fintype.of_injective i inj_i,
+end
+
+/--
+The upper bound is 2^2^|X|
+-/
+lemma card_topology_le [fintype X] : 
+  fintype.card (topological_space X) ≤ 2 ^ (2 ^ fintype.card X):=
+let i : topological_space X → set (set X) := λ τ, τ.is_open in
+have inj_i : function.injective i, by { intros τ1 τ2 h, ext1, exact h },
+begin 
+  refine le_trans (fintype.card_le_of_injective i inj_i) _,
+  rw [fintype.card_set, fintype.card_set],
+end
+
+/--
 `ℝ` has a basis consisted of all open intervals
 -/
 example : is_topological_basis { I | ∃ (a b : ℝ), I = set.Ioo a b } :=
@@ -231,19 +254,17 @@ begin
     { rintros ⟨y, ⟨⟨⟩, rfl⟩⟩, exact y.2 },
     { rintros ⟨hx1, hx2⟩, exact ⟨⟨x, hx1, hx2⟩, ⟨⟩, rfl⟩, }, },
   have c' : is_compact (set.Ico (0 : ℝ) 1),
-  { rw ←seteq, 
-    exact is_compact.image r.1 (by continuity), },
+  { rw ←seteq, exact r.1.image (by continuity), },
   have c'' := c'.is_closed.closure_eq,
   rw [closure_Ico (by norm_num : (0 : ℝ) ≠ 1), set.ext_iff] at c'',
   linarith [((c'' 1).mp ⟨zero_le_one, le_refl _⟩).2],
 end,
-begin 
-  intro rid,
-  refine nc _,
+begin
+  contrapose! nc,
   let i : homeomorph (set.Ico (0 : ℝ) 1) circle := 
   { continuous_to_fun := by continuity,
-    continuous_inv_fun := rid, ..equiv_Ico },
-  exact homeomorph.compact_space i.symm,
+    continuous_inv_fun := nc, ..equiv_Ico },
+  exact i.symm.compact_space,
 end
 
 end circle
