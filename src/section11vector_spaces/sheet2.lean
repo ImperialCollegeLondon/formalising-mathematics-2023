@@ -47,7 +47,7 @@ end
 
 /-
 
-Here's some API which you will need for this question. Noet that if `A : subspace k V` then
+Here's some API which you will need for this question. Note that if `A : subspace k V` then
 `A` is a term, not a type, and in particular it's not a vector space (it's a vector subspace).
 However `↥A`, a "coercion to type", is a type, and hence has a dimension. 
 
