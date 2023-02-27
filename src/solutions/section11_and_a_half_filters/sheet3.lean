@@ -58,7 +58,7 @@ def at_top (L : Type) [linear_order L] (e : L) : filter L :=
 
 /-
  
-### the cofinite filter
+## the cofinite filter
 
 The _cofinite filter_ on a type `α` has as its sets the subsets `S : set α`
 with the property that `Sᶜ`, the complement of `S`, is finite.
