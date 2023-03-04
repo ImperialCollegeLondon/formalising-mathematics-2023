@@ -116,89 +116,17 @@ nonzero, and the only strictly smaller prime ideal is the zero ideal. -/
 def is_height_one_prime {R : Type} [comm_ring R] [is_domain R] (P : ideal R) : Prop :=
   P.is_prime ∧ P ≠ 0 ∧ ∀ Q : ideal R, Q.is_prime ∧ Q < P → Q = 0
 
-lemma ideal.mem_iff_associated {R : Type} [comm_ring R] (I : ideal R) {a b : R} 
-  (hab : associated a b) :
-  a ∈ I ↔ b ∈ I :=
-begin
-  rcases hab with ⟨u, rfl⟩,
-  refine ⟨I.mul_mem_right _, _⟩,
-  intro h,
-  convert I.mul_mem_right (u⁻¹ : Rˣ) h,
-  simp,
-end
-
-lemma ideal.is_prime.not_one_mem {R : Type} [comm_ring R] {P : ideal R}
-  (hI : P.is_prime) : (1 : R) ∉ P :=
-begin
-  intro h,
-  apply hI.ne_top,
-  rwa ideal.eq_top_iff_one,
-end
-
-lemma ideal.is_prime.mem_of_prod_mem {R : Type} [comm_ring R] {P : ideal R}
-  (hP : P.is_prime) {L : multiset R} : L.prod ∈ P → ∃ x : R, x ∈ L ∧ x ∈ P :=
-begin
-  apply multiset.induction_on L,
-  { intro h,
-    rw multiset.prod_zero at h,
-    cases hP.not_one_mem h, },
-  { intros a L IH h,
-    simp only [multiset.prod_cons] at h,
-    rcases hP.mem_or_mem h with ha | hL,
-    { exact ⟨a, by simp, ha⟩, },
-    { obtain ⟨x, hxL, hxP⟩ := IH hL,
-      exact ⟨x, multiset.mem_cons_of_mem hxL, hxP⟩, } }
-end
-
-lemma prime.ideal_span_singleton_is_prime {R : Type} [comm_ring R] {p : R}
-  (hp : prime p) : (ideal.span {p} : ideal R).is_prime :=
-begin
-  rwa ideal.span_singleton_prime,
-  exact hp.ne_zero,
-end
-
 -- All height one primes are principal in a UFD.
 example (R : Type) [comm_ring R] [is_domain R] [unique_factorization_monoid R]
   (P : ideal R) : is_height_one_prime P → P.is_principal :=
 begin
-  rintro ⟨hPprime, hPnonzero, hht1⟩,
-  -- P is nonzero so choose nonzero x ∈ P
-  have hnonzero : ∃ x ∈ P, x ≠ (0 : R),
-  { by_contra' h,
-    apply hPnonzero,
-    ext,
-    simp only [ideal.zero_eq_bot, ideal.mem_bot],
-    refine ⟨h x, _⟩,
-    rintro rfl,
-    apply zero_mem,
-  },
-  -- Now factor x
-  rcases hnonzero with ⟨x, hxP, hx0⟩,
-  -- let L be its list of prime factors (up to units)
-  obtain ⟨L, hLprime, hLx⟩ := unique_factorization_monoid.exists_prime_factors x hx0,
-  -- The product of the prime factors is in P
-  rw ← P.mem_iff_associated hLx at hxP,
-  -- so one of the prime factors (call it pi) is in P
-  rcases hPprime.mem_of_prod_mem hxP with ⟨pi, hpiL, hpiP⟩,
-  -- so (pi) ⊆ P
-  have hpiP : ideal.span {pi} ≤ P, 
-  { rwa ideal.span_singleton_le_iff_mem, },
-  -- So either (pi)=P or (pi) ⊂ P
-  rw le_iff_eq_or_lt at hpiP,
-  rcases hpiP with rfl | hcontra,
-  { -- if (pi)=P we're done
-    use pi,
-    refl, },
-  { -- and if not then pi is prime
-    have hpiprime : prime pi := hLprime pi hpiL,
-    -- so the ideal (pi) is prime
-    have hpi : (ideal.span {pi}).is_prime := hpiprime.ideal_span_singleton_is_prime,
-    -- so by our height 1 assumption (pi)=0
-    specialize hht1 _ ⟨hpi, hcontra⟩,
-    change _ = ⊥ at hht1,
-    -- which is a contradiction as pi≠0
-    rw ideal.span_eq_bot at hht1,
-    specialize hht1 pi (set.mem_singleton pi),
-    cases hpiprime.ne_zero hht1, }
+  /-
+  The maths proof: let P be a height 1 prime. Then P ≠ 0, so choose
+  nonzero x ∈ P. Factor x into irreducibles; by primality of P one
+  of these irreducible factors π must be in P. But now (π) ⊆ P,
+  and (π) is prime and nonzero, so by the height 1 assumption we
+  must have (π)=P.
+  -/
+  sorry
 end
 
