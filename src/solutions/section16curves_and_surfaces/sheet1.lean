@@ -19,4 +19,8 @@ Let's see how feasible this is!
 noncomputable def φ₁ : ℝ → ℝ × ℝ := 
 λ x, (real.cos x, real.sin x)
 
-example : cont_diff_on ℝ ⊤ φ₁ (set.Icc 0 1) := sorry 
+example : cont_diff_on ℝ ⊤ (λ x, (real.cos x, real.sin x)) (set.Icc 0 1) :=
+begin
+  sorry,
+end
+
