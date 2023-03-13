@@ -35,24 +35,49 @@ open_locale polynomial -- for R[X] notation
 -- and f₀,f₁,...,fₙ₋₁ are elements of I, then I - (f₀,f₁,…,fₙ₋₁) is nonempty
 
 lemma lemma1 {A : Type} [comm_ring A] [decidable_eq A] (I : ideal A) (hInonfg : ¬ I.fg) (n : ℕ)
-  (f : Π m, m < n → I) : 
-  set.nonempty ((I : set A) \ (ideal.span (finset.image (λ m : fin n, (f m.1 m.2).1) finset.univ : set A))) :=
+  (g : Π m, m < n → I) : 
+  set.nonempty ((I : set A) \ (ideal.span (finset.image (λ m : fin n, (g m.1 m.2).1) finset.univ : set A))) :=
 begin
   rw set.nonempty_iff_ne_empty,
   intro h,
   rw set.diff_eq_empty at h,
   apply hInonfg,
-  refine ⟨finset.image (λ (m : fin n), (f m.1 m.2).val) finset.univ, _⟩,
+  refine ⟨finset.image (λ (m : fin n), (g m.1 m.2).val) finset.univ, _⟩,
   refine le_antisymm _ h,
   rw ideal.span_le,
   intros a ha,
   simp only [fin.val_eq_coe, subtype.val_eq_coe, finset.coe_image, finset.coe_univ, set.image_univ, set.mem_range] at ha,
   rcases ha with ⟨y, rfl⟩,
-  exact (f y.1 y.2).2,
+  exact (g y.1 y.2).2,
 end
 
-def f {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg) : ℕ → I :=
-nat.strong_rec' (λ n h, sorry)
+lemma lemma2 {A : Type} (h : A → ℕ) {S : set A} [decidable_pred (λ (n : ℕ), n ∈ h '' S)] (hs : set.nonempty S) : 
+  set.nonempty {x : A | x ∈ S ∧ h x = nat.find (hs.image h)} := 
+nat.find_spec (hs.image h)
+
+noncomputable def f {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg) 
+  : ℕ → I := by classical; exact
+λ n, nat.strong_rec_on' n (λ n h, (⟨((lemma2 (polynomial.nat_degree) (lemma1 I hInonfg n h)).some : R[X]), begin
+  have := (lemma2 (polynomial.nat_degree) (lemma1 I hInonfg n h)).some_spec,
+  have this2 := set.mem_of_mem_diff this.1,
+  exact this2,
+end⟩ : I))
+
+lemma hf1 {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg)  (n : ℕ) : 
+  (f hInonfg n).1 ∈ (I : set R[X]) \ (ideal.span (finset.image (λ m : fin n, (f hInonfg m).1) finset.univ : set R[X])) :=
+begin
+  unfold f,
+  rw nat.strong_rec_on_beta',
+  dsimp,
+  sorry,
+end
+
+lemma hf2 {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg) (n : ℕ)
+  (i : R[X]) (hi : i ∈ (I : set R[X]) \ (ideal.span (finset.image (λ m : fin n, (f hInonfg m).1) finset.univ : set R[X]))) : 
+  polynomial.nat_degree (f hInonfg n).1 ≤ polynomial.nat_degree i :=
+begin
+  sorry
+end
 
 example (R : Type) [comm_ring R] [is_noetherian_ring R] : 
   is_noetherian_ring R[X] :=
