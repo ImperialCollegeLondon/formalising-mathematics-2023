@@ -16,11 +16,11 @@ More Conrad, again from
 
 https://kconrad.math.uconn.edu/blurbs/ringtheory/noetherian-ring.pdf
 
-Let's prove Theorem 3.6 following Conrad: if R is Noetherian then R[X] is
+Let's *start* to prove Theorem 3.6 following Conrad: if R is Noetherian then R[X] is
 Noetherian.
 
-It's not impossible, but it's messy, to make a slightly complex recursive
-definition in the middle of a proof, so we factor it out and do it first.
+It's not impossible, but it's also not advisable, to make a complex recursive
+definition in the middle of a proof. So we factor it out and do it first.
 The set-up is: R is a commutative ring and I ⊆ R[X] is an ideal which
 is *not* finitely-generated. We then define a sequence fₙ of elements of R[X]
 by strong recursion: fₙ is an element of smallest degree in `I - (f₀,f₁,…fₙ₋₁)`;
@@ -34,7 +34,7 @@ open_locale polynomial -- for R[X] notation
 -- If I is a non-finitely-generated ideal of a commutative ring A,
 -- and f₀,f₁,...,fₙ₋₁ are elements of I, then I - (f₀,f₁,…,fₙ₋₁) is nonempty
 
-lemma lemma1 {A : Type} [comm_ring A] [decidable_eq A] (I : ideal A) (hInonfg : ¬ I.fg) (n : ℕ)
+lemma lemma1 {A : Type} [comm_ring A] [decidable_eq A] {I : ideal A} (hInonfg : ¬ I.fg) (n : ℕ)
   (g : Π m, m < n → I) : 
   set.nonempty ((I : set A) \ (ideal.span (finset.image (λ m : fin n, (g m.1 m.2).1) finset.univ : set A))) :=
 begin
@@ -51,13 +51,20 @@ begin
   exact (g y.1 y.2).2,
 end
 
-lemma lemma2 {A : Type} (h : A → ℕ) {S : set A} [decidable_pred (λ (n : ℕ), n ∈ h '' S)] (hs : set.nonempty S) : 
-  set.nonempty {x : A | x ∈ S ∧ h x = nat.find (hs.image h)} := 
-nat.find_spec (hs.image h)
+#check function.argmin_on
 
-noncomputable def f {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg) 
-  : ℕ → I := by classical; exact
-λ n, nat.strong_rec_on' n (λ n h, (⟨((lemma2 (polynomial.nat_degree) (lemma1 I hInonfg n h)).some : R[X]), begin
+open_locale classical
+
+-- I still haven't sorted out this definition and right now I need to prepare the curves
+-- and surfaces lecture :-/ Anyway, the moral of this sheet is that making complicated
+-- definitions is perhaps more annoying than you might think :-/
+noncomputable def f {R : Type} [comm_ring R] {I : ideal R[X]} [decidable_eq I] 
+  (hInonfg : ¬ I.fg) (n : ℕ) : R[X] := nat.strong_rec_on' n $ 
+  λ m hm, function.argmin_on (polynomial.nat_degree : R[X] → ℕ) (is_well_founded.wf) _ $
+  lemma1 hInonfg n sorry
+
+#exit  
+(λ n h, (⟨((lemma2 (polynomial.nat_degree) (lemma1 I hInonfg n h)).some : R[X]), begin
   have := (lemma2 (polynomial.nat_degree) (lemma1 I hInonfg n h)).some_spec,
   have this2 := set.mem_of_mem_diff this.1,
   exact this2,
