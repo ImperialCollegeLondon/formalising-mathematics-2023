@@ -74,8 +74,9 @@ end
 -- 1 + the number of edges equals the number of vertices.
 -- I don't think this is in the library and it would be a neat project.
 
-example (V : Type) [fintype V] [decidable_eq V] (G : simple_graph V) 
-  [fintype (simple_graph.edge_set G)] (hG : G.is_tree) :
+open_locale classical
+
+example (V : Type) [fintype V] (G : simple_graph V) (hG : G.is_tree) :
   1 + finset.card (G.edge_finset) = fintype.card V :=
 sorry
 
