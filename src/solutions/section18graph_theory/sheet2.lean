@@ -101,6 +101,10 @@ example : Prop := a.is_trail
 
 example : Prop :=  a.is_path
 
+-- Paths are sufficiently common that `G.path v w` is defined to be the
+-- subtype `{p : G.walk v w // p.is_path}`. So to give a term of type `G.path v w`
+-- is to give a pair consisting of a walk `p : G.walk v w` and a proof of `p.is_path`.
+
 -- A walk is a *circuit* at `v : V` if it's a nonempty trail beginning and ending at `v`.
 
 example (b : G.walk v v) : Prop := b.is_circuit
