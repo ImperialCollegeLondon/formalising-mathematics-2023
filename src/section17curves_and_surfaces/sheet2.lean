@@ -26,16 +26,7 @@ end
 -- Here's a harder example
 example (a : ℂ) (x : ℝ) : differentiable_at ℝ (λ (y : ℝ), complex.exp (-(a * ↑y ^ 2))) x :=
 begin
-  apply differentiable_at.comp,
-  { apply differentiable_at.cexp,
-    apply differentiable_at_id', },
-  { apply differentiable_at.neg,
-    apply differentiable_at.mul,
-    { apply differentiable_at_const, },
-    { norm_cast,
-      apply complex.differentiable_at_coe,
-      apply differentiable_at.pow,
-      apply differentiable_at_id', } },
+  sorry,
 end
 
 noncomputable def φ₁ : ℝ → ℝ × ℝ := 
