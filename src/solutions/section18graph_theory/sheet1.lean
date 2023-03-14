@@ -5,7 +5,7 @@ Author : Kevin Buzzard
 -/
 
 import tactic
-import combinatorics.simple_graph.subgraph -- graphs and subgraphs
+import combinatorics.simple_graph.basic -- definition of graph
 /-
 
 # Graph theory
