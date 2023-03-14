@@ -16,7 +16,7 @@ The set-up : `I` is an index type, `E` is a family of `normed_add_comm_group`s
 is a real number).
 
 Then given `p : ℝ≥0∞` (i.e. an element `p` of `[0,∞]`) there is a theory
-of ℓᵖ spaces, which is the subspace of `∏ᵢ, E i` consisting of the
+of ℓᵖ spaces, which is the subspace of `Π i, E i` (the product) consisting of the
 sections `vᵢ` such that `∑ᵢ ‖vᵢ‖ᵖ < ∞`. For `p=∞` this means "the ‖vᵢ‖ are
 bounded".
 
