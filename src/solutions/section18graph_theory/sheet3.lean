@@ -70,9 +70,20 @@ begin
     refl, },
 end
 
--- If you want a hard graph theory puzzle, prove that in a finite tree, 
--- 1 + the number of edges equals the number of vertices.
--- I don't think this is in the library and it would be a neat project.
+/- 
+If you want a hard graph theory puzzle, prove that in a finite tree, 
+1 + the number of edges equals the number of vertices.
+I don't think this is in the library and it would be a neat project.
+
+Because induction on the size of `V` will be messy (it will involve
+changing `V` and them moving between graphs on different types)
+I think that the best way to do this would be to prove that for
+an acyclic graph on a fixed `V`, #connected components + #edges = #vertices,
+by induction on number of edges.
+
+Note: the solution to this is not in the solutions!
+-/
+
 
 open_locale classical
 
