@@ -1,6 +1,0 @@
-Graph theory (Wed 15th)
-Alg NT
-Logic
-Functional Analysis (Tues 14th?)
-Galois Theory
-Rep theory
