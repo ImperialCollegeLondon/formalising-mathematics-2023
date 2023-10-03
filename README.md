@@ -1,6 +1,8 @@
 # Formalising Mathematics
 
-This is the repository for Kevin Buzzard's 2023 course on formalising mathmatics in the Lean theorem prover. The course ran from January to March 2023. Note that this course was in Lean 3 which is now out of date (end of life). In December 2023 I will be translating this material into Lean 4.
+**Note that this course was in Lean 3 which is now out of date (end of life). In December 2023 I will be translating this material into Lean 4.**
+
+This is the repository for Kevin Buzzard's 2023 course on formalising mathmatics in the Lean theorem prover. The course ran from January to March 2023. 
 
 ## Local installation
 
