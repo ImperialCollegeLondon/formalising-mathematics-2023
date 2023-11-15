@@ -47,7 +47,7 @@ is measurable. This coincides with Lean's "make functions total" philosophy (the
 -/
 
 open filter
-open_locale nnreal ennreal measure_theory big_operators topological_space
+open_locale nnreal ennreal measure_theory big_operators topology
 -- note to self: removed `probability_theory`
 
 namespace measure_theory

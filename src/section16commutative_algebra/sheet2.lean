@@ -6,7 +6,7 @@ Author : Kevin Buzzard
 
 import tactic
 import ring_theory.noetherian -- theory of Noetherian rings
-import ring_theory.polynomial
+import ring_theory.polynomial.basic
 
 /-
 

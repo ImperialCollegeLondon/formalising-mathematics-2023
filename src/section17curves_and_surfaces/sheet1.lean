@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic
 import analysis.calculus.parametric_integral
+import analysis.calculus.cont_diff
 
 /-
 
@@ -73,9 +74,10 @@ begin
   sorry,
 end
 
--- The simplifier can even do this sort of thing:
+-- The simplifier used to be able to do this
 example (x : ℝ) : deriv (λ x, cos (sin x) * exp x) x = (cos(sin(x))-sin(sin(x))*cos(x))*exp(x) :=
-by { simp, ring }
+sorry
+--by { simp, ring }
 
 -- Try this one:
 example (a : ℝ) (x : ℝ) : differentiable_at ℝ (λ (y : ℝ), exp (-(a * y ^ 2))) x :=
