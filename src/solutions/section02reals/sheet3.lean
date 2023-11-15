@@ -120,6 +120,22 @@ example {a : ℕ → ℝ} {t : ℝ} (ha : tends_to a t) :
   tends_to (λ n, - a n) (-t) :=
 begin
   rw tends_to_def at ha ⊢,
+-- direct congr application:
+--   revert ha,
+--   refine iff.mp _,
+--   rw iff_iff_eq,
+--   apply pi_congr (λ _, _),
+--   apply pi_congr (λ _, _),
+--   congr,
+--   apply funext (λ _, _),
+--   apply pi_congr (λ _, _),
+--   apply pi_congr (λ _, _),
+--   congr' 1,
+--   sorry
+-- end
+-- #exit
+  
+--  convert ha using 3,
   intros ε hε,
   specialize ha ε hε,
   cases ha with B hB,
@@ -127,7 +143,7 @@ begin
   intros n hn,
   specialize hB n hn,
   have h : ∀ (x : ℝ), |(-x)| = |x|,
-    sorry, -- how to prove basic results about |.|? See next sheet!
+    exact abs_neg, -- thanks library_search
   rw ← h,
   ring_nf at hB ⊢,
   exact hB,
