@@ -51,7 +51,7 @@ open_locale big_operators
 
 example [is_separable E F] [finite_dimensional E F] (f : F) : 
   algebra_map E Ω (algebra.norm E f) = ∏ σ : F →ₐ[E] Ω, σ f := 
-algebra.norm_eq_prod_embeddings E Ω
+algebra.norm_eq_prod_embeddings E Ω f
 
 example [is_separable E F] [finite_dimensional E F] (f : F) :
   algebra_map E Ω (algebra.trace E F f) = ∑ σ : F →ₐ[E] Ω, σ f := 

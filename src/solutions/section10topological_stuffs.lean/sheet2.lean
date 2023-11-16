@@ -144,10 +144,9 @@ begin
     { refine hx _,
       refine ⟨-r, _⟩,
       replace hx' := hx'.symm,
-      rw ←neg_eq_iff_neg_eq at hx',
-      rw [add_zero, mul_neg, neg_eq_iff_neg_eq, hx'],
-      exact_mod_cast hr, }, },
-
+      rw [neg_eq_iff_eq_neg] at hx',
+      rw [add_zero, mul_neg, neg_eq_iff_eq_neg, ← hx'],
+      exact_mod_cast hr.symm, }, },
   { intros r,
     simp only [set.mem_insert_iff, set.mem_singleton_iff] at r,
     rcases r with (rfl|rfl),

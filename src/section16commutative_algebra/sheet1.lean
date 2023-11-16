@@ -56,4 +56,5 @@ begin
   -- Therefore r' ∈ ker(φ^{n+1})
   -- ...=ker(φ^n)
   -- and hence r=φ^n(r')=0 as required
+  sorry
 end

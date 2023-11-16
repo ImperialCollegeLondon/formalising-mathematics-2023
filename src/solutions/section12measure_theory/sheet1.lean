@@ -125,9 +125,8 @@ example (A : set X) : measurable_space X := measurable_space.generate_from {A}
 example (A : set X) : (measurable_space.generate_from {A}).measurable_set' = ({∅,A,Aᶜ,⊤} : set (set X)) := 
 begin
   ext B,
-  simp,
   unfold measurable_space.generate_from,
-  dsimp,
+  simp,
   split,
   { intro h,
     induction h with A' hA' C hC1 hC2 f hf1 hf2,

@@ -6,6 +6,8 @@ Author : Kevin Buzzard
 
 import tactic
 import analysis.calculus.parametric_integral
+import analysis.calculus.cont_diff
+import analysis.special_functions.trigonometric.deriv
 
 /-
 

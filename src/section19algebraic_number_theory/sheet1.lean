@@ -236,3 +236,5 @@ instance : has_mul Q_sqrt_2 := ⟨mul⟩
 
 -- For hints, see the complex number game repository, where I build ℂ from ℝ.
 -- https://github.com/ImperialCollegeLondon/complex-number-game
+
+end Q_sqrt_2

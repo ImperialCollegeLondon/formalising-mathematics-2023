@@ -50,7 +50,7 @@ variables (E F K : Type) [field E] [field F] [field K] [algebra E F] [algebra F 
   [algebra E K] [is_scalar_tower E F K] 
 
 -- There is a mathematically correct tower law, involving cardinals:
-example : module.rank E F * module.rank F K = module.rank E K := dim_mul_dim E F K
+example : module.rank E F * module.rank F K = module.rank E K := rank_mul_rank E F K
 
 -- But this is a pain to use, because cardinals are not a particularly well-behaved
 -- object. So let's put in a finite-dimensional hypothesis and use `finrank`.

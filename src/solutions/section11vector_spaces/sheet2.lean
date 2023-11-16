@@ -43,7 +43,7 @@ example (A B : subspace k V) (hV : finrank k V = 9) (hA : finrank k A = 5) (hB :
   A ⊓ B ≠ ⊥ :=
 begin
   intro h,
-  have h1 := submodule.dim_sup_add_dim_inf_eq A B,
+  have h1 := submodule.finrank_sup_add_finrank_inf_eq A B,
   rw [hA, hB, h, finrank_bot k V] at h1,
   norm_num at h1,
   have h2 := submodule.finrank_le (A ⊔ B),

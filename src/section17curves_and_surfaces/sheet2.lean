@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic
 import data.real.basic
 import analysis.calculus.parametric_integral
+import analysis.special_functions.exp_deriv
 
 /-
 

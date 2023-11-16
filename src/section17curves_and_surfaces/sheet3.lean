@@ -7,7 +7,7 @@ Author : Kevin Buzzard
 import tactic
 import data.real.basic
 import analysis.calculus.parametric_integral
-
+import analysis.calculus.cont_diff
 /-
 
 # Smooth functions

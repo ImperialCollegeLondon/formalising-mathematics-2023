@@ -160,7 +160,11 @@ theorem tends_to_unique (a : ℕ → ℝ) (s t : ℝ)
 begin
   by_contra h,
   wlog h2 : s < t,
-  { exact ne.lt_or_lt h },
+  { cases ne.lt_or_lt h with h3 h3,
+    { contradiction },
+    { apply this _ _ _ ht hs _ h3,
+      exact ne_comm.mp h,
+    } },
   set ε := t - s with hε,
   have hε : 0 < ε := sub_pos.mpr h2,
   obtain ⟨X, hX⟩ := hs (ε/2) (by linarith),

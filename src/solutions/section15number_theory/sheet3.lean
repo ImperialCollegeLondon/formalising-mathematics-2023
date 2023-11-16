@@ -47,17 +47,19 @@ begin
   { apply divides_of_cong_four }  
 end
 
+#check set.infinite
 -- This is not number theory any more, it's switching between two
 -- interpretations of "this set of naturals is infinite" 
 lemma infinite_iff_arb_large (S : set ℕ) : S.infinite ↔ ∀ N, ∃ n > N, n ∈ S :=
 begin
   split,
-  { intro h,
-    have h2 := set.infinite.exists_nat_lt h,
-    intro n,
-    rcases h2 n with ⟨m, hm, h3⟩,
+  { intros h n,
+    have h2 := set.infinite.exists_not_mem_finset h (finset.range (n + 1)),
+    rcases h2 with ⟨m, hm, h3⟩,
     use m,
-    exact ⟨h3, hm⟩,
+    refine ⟨_, hm⟩, 
+    contrapose! h3,
+    exact finset.mem_range_succ_iff.mpr h3, 
   },
   { contrapose!,
     intro h,
