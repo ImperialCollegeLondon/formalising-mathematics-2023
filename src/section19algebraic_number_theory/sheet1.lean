@@ -7,6 +7,9 @@ import data.real.basic
 
 import number_theory.number_field.class_number
 import tactic
+
+namespace section19sheet1
+
 /-
 
 # Number fields and their rings of integers.
@@ -238,3 +241,5 @@ instance : has_mul Q_sqrt_2 := ⟨mul⟩
 -- https://github.com/ImperialCollegeLondon/complex-number-game
 
 end Q_sqrt_2
+
+end section19sheet1

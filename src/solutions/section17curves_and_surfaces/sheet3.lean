@@ -10,6 +10,8 @@ import analysis.calculus.parametric_integral
 import analysis.calculus.cont_diff
 import analysis.special_functions.trigonometric.deriv
 
+namespace section17sheet3solutions
+
 /-
 
 # Smooth functions
@@ -66,3 +68,5 @@ the inverse function theorem on Banach spaces, you can also route through order 
 for a purely one-dimensional construction. Look at the construction of docs#real.arctan 
 for a model; it uses docs#strict_mono_on.order_iso
 -/
+
+end section17sheet3solutions

@@ -7,6 +7,8 @@ import data.real.basic
 
 import number_theory.number_field.class_number
 import tactic
+
+namespace section19sheet2
 /-
 
 # More on rings of integers.
@@ -48,5 +50,4 @@ begin
   sorry -- I don't finish this in the solutions
 end
 
-
-
+end section19sheet2

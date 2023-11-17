@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import order.filter.basic
 
+namespace section115sheet3
 /-!
 
 # Examples of filters
@@ -94,3 +95,5 @@ If you like this filter stuff, then formalise in Lean and prove the following:
 
 
 -/
+
+end section115sheet3

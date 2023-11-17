@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import data.real.basic -- imports the real numbers
 
+namespace section2sheet3solutions
 /-
 
 # Limits of sequences in Lean
@@ -148,3 +149,5 @@ begin
   ring_nf at hB ⊢,
   exact hB,
 end
+
+end section2sheet3solutions

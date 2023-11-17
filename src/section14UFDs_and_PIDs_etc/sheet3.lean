@@ -9,6 +9,8 @@ import ring_theory.unique_factorization_domain -- UFDs
 import ring_theory.principal_ideal_domain -- PIDs
 import data.mv_polynomial.comm_ring -- multivariable polys
 import ring_theory.polynomial.basic
+
+namespace section14sheet3
 /-
 
 # Unique Factorization Domains
@@ -130,3 +132,4 @@ begin
   sorry
 end
 
+end section14sheet3

@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import measure_theory.measurable_space
 
+namespace section12sheet1
 /-
 
 # Measure theory
@@ -57,3 +58,5 @@ example (A : set X) : (measurable_space.generate_from {A}).measurable_set' = ({â
 begin
   sorry,
 end
+
+end section12sheet1

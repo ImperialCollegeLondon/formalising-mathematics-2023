@@ -8,6 +8,9 @@ import tactic -- imports all the Lean tactics
 import data.real.basic -- imports the real numbers
 import solutions.section02reals.sheet5 -- import a bunch of previous stuff
 
+namespace section2sheet6
+open section2sheet3solutions
+
 /-
 
 # Harder questions
@@ -118,3 +121,5 @@ theorem tends_to_unique (a : ℕ → ℝ) (s t : ℝ)
 begin
   sorry,
 end
+
+end section2sheet6

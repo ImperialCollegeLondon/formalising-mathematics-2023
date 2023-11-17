@@ -8,6 +8,7 @@ import tactic
 import ring_theory.noetherian -- theory of Noetherian rings
 import ring_theory.polynomial.basic
 
+namespace section16sheet2
 /-
 
 # Commutative algebra
@@ -65,3 +66,5 @@ sorry
 def f {R : Type} [comm_ring R] {I : ideal R[X]} (hInonfg : ¬ I.fg) 
   : ℕ → I := 
 sorry
+
+end section16sheet2

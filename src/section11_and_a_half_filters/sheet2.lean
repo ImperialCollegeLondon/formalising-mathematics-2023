@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import order.filter.basic
 
+namespace section115sheet2
 /-!
 
 # The order (≤) on filters
@@ -124,3 +125,5 @@ example (I : Type) (F : I → filter α) (G : filter α) (hG : ∀ i, G ≤ F i)
 begin
   sorry,
 end
+
+end section115sheet2

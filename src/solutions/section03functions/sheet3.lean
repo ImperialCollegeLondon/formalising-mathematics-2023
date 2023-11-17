@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section3sheet1solutions
 /-
 
 # More on functions
@@ -98,3 +99,5 @@ begin
   specialize h X Y Z f g gf_surjective Y.c,
   rcases h with ⟨⟨_⟩, ⟨⟩⟩, -- this line does three `cases` at once.
 end
+
+end section3sheet1solutions

@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section9sheet3
 /-
 
 Note that `X ≃ Y` is not an equivalence relation, for the stupid
@@ -109,3 +110,4 @@ end
 
 -- Remark: the equivalence classes of `R` are called *cardinals*.
 
+end section9sheet3

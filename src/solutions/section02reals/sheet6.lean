@@ -8,6 +8,10 @@ import tactic -- imports all the Lean tactics
 import data.real.basic -- imports the real numbers
 import solutions.section02reals.sheet5 -- import a bunch of previous stuff
 
+namespace section2sheet6solutions
+
+open section2sheet3solutions section2sheet5solutions
+
 /-
 
 # Harder questions
@@ -207,3 +211,5 @@ begin
   -- and the simplifier can now reduce that to the goal |t-s|<ε.
   simpa using hX,
 end
+
+end section2sheet6solutions

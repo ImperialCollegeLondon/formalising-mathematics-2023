@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section3sheet1solutions
 /-!
 
 # Functions in Lean.
@@ -179,3 +180,5 @@ begin
   -- goal is now exactly hx
   exact hx,
 end
+
+end section3sheet1solutions

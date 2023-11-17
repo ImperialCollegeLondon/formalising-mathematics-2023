@@ -6,6 +6,8 @@ Author : Kevin Buzzard
 
 import tactic
 import combinatorics.simple_graph.basic -- definition of graph
+
+namespace section18sheet1
 /-
 
 # Graph theory
@@ -180,3 +182,5 @@ variables (W : Type) (H : simple_graph W)
 example : Type := G →g H -- maps f:V → W such that v₁~v₂ -> f(v₁)~f(v₂)
 example : Type := G ↪g H -- injections f : V → W such that v₁~v₂ ↔ f(v₁)~f(v₂)
 example : Type := G ≃g H -- isomorphisms of graphs
+
+end section18sheet1

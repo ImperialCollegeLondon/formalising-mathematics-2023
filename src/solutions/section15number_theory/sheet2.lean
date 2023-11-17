@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic
 import number_theory.divisors -- added to make Bhavik's proof work
 
+namespace section15sheet2solutions
 /-
 
 # Find all integers x ≠ 3 such that x - 3 divides x^3 - 3
@@ -65,3 +66,4 @@ begin
   all_goals { omega },
 end
 
+end section15sheet2solutions

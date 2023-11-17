@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import representation_theory.basic
 
+namespace section20sheet2
 /-
 
 # Representation theory
@@ -108,3 +109,5 @@ begin
 end
 
 end rep_map
+
+end section20sheet2

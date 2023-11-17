@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic
 
+namespace section9sheet2
 /-
 
 # Constructive bijections
@@ -57,3 +58,5 @@ def bijection2 : ℚ ≃ ℚ :=
   right_inv := begin
     sorry,
   end }  
+
+end section9sheet2

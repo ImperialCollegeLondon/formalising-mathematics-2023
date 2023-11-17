@@ -8,6 +8,7 @@ import tactic
 import ring_theory.noetherian -- theory of Noetherian rings
 import ring_theory.polynomial.basic
 
+namespace section16sheet2solutions
 /-
 
 # Commutative algebra
@@ -97,3 +98,5 @@ begin
   -- fₙ is an element of smallest degree in I - (f₀,f₁,…,fₙ₋₁)
   sorry,  
 end
+
+end section16sheet2solutions

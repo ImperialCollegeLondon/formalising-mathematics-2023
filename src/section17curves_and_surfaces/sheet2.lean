@@ -9,6 +9,7 @@ import data.real.basic
 import analysis.calculus.parametric_integral
 import analysis.special_functions.exp_deriv
 
+namespace section17sheet2
 /-
 
 # Basic calculus
@@ -37,3 +38,5 @@ example : cont_diff_on ℝ ⊤ (λ x, (real.cos x, real.sin x)) (set.Icc 0 1) :=
 begin
   sorry,
 end
+
+end section17sheet2

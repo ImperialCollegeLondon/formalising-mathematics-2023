@@ -8,6 +8,8 @@ import topology.bases               -- definition of topological bases
 import topology.metric_space.basic  -- facts about intervals in ℝ
 import topology.algebra.order.floor -- facts about floor function, fractional part function etc
 
+namespace section10sheet1
+
 noncomputable theory
 
 /-!
@@ -32,7 +34,7 @@ In this sheet, the following can be found:
 
 universe u
 
-namespace topological_space
+open topological_space
 
 variables (X : Type u)
 
@@ -144,4 +146,4 @@ sorry
 
 end circle
 
-end topological_space
+end section10sheet1

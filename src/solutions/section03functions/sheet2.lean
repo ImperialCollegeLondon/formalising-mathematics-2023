@@ -6,6 +6,8 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section3sheet2solutions
+
 /-!
 
 # Interlude: types.
@@ -113,3 +115,5 @@ begin
   try {refl};
   try {cases h},
 end
+
+end section3sheet2solutions

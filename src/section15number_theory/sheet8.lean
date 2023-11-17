@@ -8,6 +8,8 @@ import tactic
 import data.zmod.algebra
 import number_theory.wilson
 
+namespace section15sheet8
+
 open_locale big_operators
 
 /-
@@ -28,3 +30,5 @@ lemma exists_sqrt_neg_one_of_one_mod_four (p : ℕ) (hp : p.prime)
 begin
   sorry,
 end
+
+end section15sheet8

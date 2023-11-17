@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section4sheet2
 /-!
 
 # Challenge sheet
@@ -103,3 +104,5 @@ example : ¬ (∀ a : bool, 1 * a = a) :=
 begin
   sorry, --dec_trivial,
 end
+
+end section4sheet2

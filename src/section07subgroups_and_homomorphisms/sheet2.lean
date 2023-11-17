@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import group_theory.subgroup.basic -- import Lean's subgroups
 
+namespace section7sheet2
 /-
 
 # Group homomorphisms
@@ -169,3 +170,4 @@ begin
   sorry,
 end
 
+end section7sheet2

@@ -6,6 +6,8 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 import data.real.basic -- the reals
+
+namespace section5sheet4
 /-!
 
 # Sets in Lean, sheet 4 : making sets from predicates
@@ -71,3 +73,4 @@ begin
   sorry,
 end
 
+end section5sheet4

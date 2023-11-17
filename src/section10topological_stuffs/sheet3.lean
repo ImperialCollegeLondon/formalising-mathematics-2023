@@ -8,6 +8,8 @@ import ring_theory.ideal.operations
 import topology.algebra.polynomial
 import topology.bases
 
+namespace section10sheet3
+
 /-!
 # Prime spectrum of a ring and its Zariski topology
 
@@ -142,3 +144,5 @@ lemma generic_point_uniq (x : Spec ℤ[X]) (hx : closure {x} = (set.univ : set (
 sorry
 
 end
+
+end section10sheet3

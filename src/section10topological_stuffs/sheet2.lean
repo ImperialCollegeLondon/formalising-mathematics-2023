@@ -8,6 +8,8 @@ import tactic
 import topology.subset_properties
 import ring_theory.int.basic
 
+namespace section10sheet2
+
 /-!
 # Proof of infinitude of prime numbers using topology
 
@@ -76,3 +78,5 @@ sorry
 
 lemma infinite_prime : (set_of nat.prime).infinite :=
 sorry
+
+end section10sheet2

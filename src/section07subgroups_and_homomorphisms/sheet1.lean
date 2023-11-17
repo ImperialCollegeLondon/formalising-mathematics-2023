@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import group_theory.subgroup.basic -- imports the theory of subgroups
 
+namespace section7sheet1
 /-!
 
 # Subgroups
@@ -189,3 +190,5 @@ lemma conjugate_eq_of_abelian (habelian : ∀ a b : G, a * b = b * a) : conjugat
 begin
   sorry,
 end
+
+end section7sheet1

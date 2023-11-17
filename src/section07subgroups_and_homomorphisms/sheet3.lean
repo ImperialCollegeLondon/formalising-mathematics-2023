@@ -7,6 +7,7 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import group_theory.quotient_group -- import Lean's quotient groups
 
+namespace section7sheet3
 /-
 
 # Quotient groups
@@ -115,3 +116,5 @@ begin
   -- this proof does my head in
   refl,
 end
+
+end section7sheet3

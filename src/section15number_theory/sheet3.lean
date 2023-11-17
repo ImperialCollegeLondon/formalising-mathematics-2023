@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic
 
+namespace section15sheet3
 /-
 
 # Prove that there exists infinitely many positive integers n such that
@@ -54,3 +55,5 @@ begin
   rw infinite_iff_arb_large,
   exact arb_large_soln,
 end
+
+end section15sheet3

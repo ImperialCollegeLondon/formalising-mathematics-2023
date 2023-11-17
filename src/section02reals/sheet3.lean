@@ -7,6 +7,8 @@ Author : Kevin Buzzard
 import tactic -- imports all the Lean tactics
 import data.real.basic -- imports the real numbers
 
+namespace section2sheet3
+
 /-
 
 # Limits of sequences in Lean
@@ -121,3 +123,5 @@ begin
   -- Leave this for now and try sheet 4, where you'll learn how to discover these things.
   -- We'll come back to this example on sheet 5. 
 end
+
+end section2sheet3

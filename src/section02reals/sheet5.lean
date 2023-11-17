@@ -8,6 +8,10 @@ import tactic -- imports all the Lean tactics
 import data.real.basic -- imports the real numbers
 import solutions.section02reals.sheet3 -- import the definition of `tends_to` from a previous sheet
 
+namespace section2sheet5
+
+open section2sheet3solutions
+
 -- you can maybe do this one now
 theorem tends_to_neg {a : ℕ → ℝ} {t : ℝ} (ha : tends_to a t) :
   tends_to (λ n, - a n) (-t) :=
@@ -45,3 +49,4 @@ begin
   sorry
 end
 
+end section2sheet5

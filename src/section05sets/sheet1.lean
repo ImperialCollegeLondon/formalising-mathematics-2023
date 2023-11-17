@@ -6,6 +6,7 @@ Author : Kevin Buzzard
 
 import tactic -- imports all the Lean tactics
 
+namespace section5sheet1
 /-!
 
 # Sets in Lean, sheet 1 : ∪ ∩ ⊆ and all that
@@ -116,3 +117,5 @@ example : A ⊆ B → C ⊆ D → A ∩ C ⊆ B ∩ D :=
 begin
   sorry,
 end
+
+end section5sheet1

@@ -40,6 +40,8 @@ a type which just has three terms.
 
 -/
 
+namespace section3sheet2
+
 -- A type with three terms
 inductive X : Type
 | a : X
@@ -112,3 +114,5 @@ begin
   try {refl};
   try {cases h},
 end
+
+end section3sheet2
